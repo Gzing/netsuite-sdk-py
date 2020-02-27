@@ -41,6 +41,7 @@ COMPLEX_TYPES = {
         'LocationSearchBasic',
         'TransactionSearchBasic',
         'VendorSearchBasic',
+        'Address'
     ],
 
     # urn:relationships.lists.webservices.netsuite.com
