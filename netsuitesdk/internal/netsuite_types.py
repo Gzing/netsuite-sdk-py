@@ -41,6 +41,7 @@ COMPLEX_TYPES = {
         'LocationSearchBasic',
         'TransactionSearchBasic',
         'VendorSearchBasic',
+        'AddressSearchBasic',
         'Address'
     ],
 

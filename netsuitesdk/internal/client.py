@@ -12,7 +12,6 @@ import random
 import time
 
 from zeep import Client
-from zeep.cache import SqliteCache
 from zeep.transports import Transport
 from zeep.exceptions import Fault
 from zeep.exceptions import LookupError as ZeepLookupError
@@ -21,6 +20,8 @@ from .constants import *
 from .exceptions import *
 from .netsuite_types import *
 from .utils import PaginatedSearch
+from .cache import RedisCache
+
 
 class NetSuiteClient:
     """The Netsuite client class providing access to the Netsuite
@@ -41,7 +42,7 @@ class NetSuiteClient:
     _app_id = None
 
 
-    def __init__(self, account=None, caching=True, caching_timeout=2592000):
+    def __init__(self, db, host, account=None, caching=True, caching_timeout=2592000):
         """
         Initialize the Zeep SOAP client, parse the xsd specifications
         of Netsuite and store the complex types as attributes of this
@@ -61,9 +62,8 @@ class NetSuiteClient:
         self._datacenter_url = self.DATACENTER_URL_TEMPLATE.format(account=account.replace('_', '-'))
 
         if caching:
-            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache.db')
             timeout = caching_timeout
-            cache = SqliteCache(path=path, timeout=timeout)
+            cache = RedisCache(host=host, db=db, timeout=timeout)
             transport = Transport(cache=cache)
         else:
             transport = None
@@ -335,7 +335,7 @@ class NetSuiteClient:
         method = getattr(self._service_proxy, name)
         # call the service:
         include_search_preferences = (name == 'search')
-        response = method(*args, 
+        response = method(*args,
                 _soapheaders=self._build_soap_headers(include_search_preferences=include_search_preferences)
                 , **kwargs)
         return response
