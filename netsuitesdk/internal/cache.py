@@ -16,7 +16,6 @@ class RedisCache(Base):
                                    db=db)
 
     def add(self, url, content):
-        logger.debug("Caching contents of %s", url)
         if not isinstance(content, (str, bytes)):
             raise TypeError(
                 "a bytes-like object is required, not {}".format(type(content).__name__)
@@ -27,5 +26,4 @@ class RedisCache(Base):
         content = self._client.get(url)
         if content:
             return content
-        logger.debug("Cache MISS for %s", url)
         return None
