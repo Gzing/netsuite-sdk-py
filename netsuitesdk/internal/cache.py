@@ -20,7 +20,7 @@ class RedisCache(Base):
             raise TypeError(
                 "a bytes-like object is required, not {}".format(type(content).__name__)
             )
-        self._client.set(url, content, timeout)
+        self._client.set(url, content, self._timeout)
 
     def get(self, url):
         content = self._client.get(url)
