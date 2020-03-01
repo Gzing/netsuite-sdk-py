@@ -42,7 +42,7 @@ class NetSuiteClient:
     _app_id = None
 
 
-    def __init__(self, db, host, account=None, caching=True, caching_timeout=2592000):
+    def __init__(self, db, host, account=None, caching=False, caching_timeout=2592000):
         """
         Initialize the Zeep SOAP client, parse the xsd specifications
         of Netsuite and store the complex types as attributes of this
